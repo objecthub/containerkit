@@ -2,7 +2,7 @@
 
 ## Background
 
-The _Go Programming Language_ currently does not come with a rich, consistent library for representing collections of values. Instead, the language itself provides relatively powerful native array and map abstractions. Those are complemented with a small number of ad-hoc collection implementations in the `container` package. The data types in this package are inconsistent and lack functionality. Furthermore, they are not separating their interface from their implementation, compromising flexibility, extensibility, and modularity in client code. Go programs typically combine the use of these implementations with the built-in collection abstractions. This leads to even more inconsistencies and asymmetries in the code.
+The [Go Programming Language](http://golang.org) currently does not come with a rich, consistent library for representing collections of values. Instead, the language itself provides relatively powerful native [array](http://golang.org/doc/effective_go.html#arrays) and [map](http://golang.org/doc/effective_go.html#maps) abstractions. Those are complemented with a small number of ad-hoc collection implementations in the [container package](http://golang.org/pkg/container/). The data types in this package are inconsistent and lack functionality. Furthermore, they are not separating their interface from their implementation, compromising flexibility, extensibility, and modularity in client code. Go programs typically combine the use of these implementations with the built-in collection abstractions. This leads to even more inconsistencies and asymmetries in the code.
 
 ## Project goals
 
