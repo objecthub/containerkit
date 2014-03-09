@@ -147,7 +147,7 @@ func (this *container) Combine(f Binop, other Container) DependentContainer {
 }
 
 func (this *container) Zip(other Container) DependentContainer {
-  return this.Combine(util.PairBinop, other)
+  return this.Combine(PairBinop, other)
 }
 
 func (this *container) FoldLeft(f Binop, z interface{}) interface{} {

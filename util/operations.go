@@ -17,6 +17,34 @@ package util
 import "math"
 
 
+// Interface Hashable is implemented by values providing a HashCode method.
+// The default generic hash function uses this interface for values that
+// don't have a specific predefined hash function (e.g. structs)
+type Hashable interface {
+  HashCode() int
+}
+
+// Interface Comparable is implemented by values providing a Compare method.
+// The default generic comparison function uses this interface for values
+// that don't have a specific predefined comparison function (e.g. structs)
+type Comparable interface {
+  Compare(other interface{}) int
+}
+
+// Interface Indentifiable is implemented by values providing an Equals
+// method which returns true if the given value is equivalent.
+type Identifiable interface {
+  Equals(other interface{}) bool
+}
+
+func Inc(i int) int {
+  return i + 1
+}
+
+func Dec(i int) int {
+  return i - 1
+}
+
 func TruePredicate(x interface{}) bool {
   return true
 }
@@ -142,18 +170,3 @@ func comparatorCode(eq bool, less bool) int {
   }
   return 1
 }
-
-// TODO: clean this up; this is a duplicate from containers/operations.go
-
-type Hashable interface {
-  HashCode() int
-}
-
-type Comparable interface {
-  Compare(other interface{}) int
-}
-
-type Identifiable interface {
-  Equals(other interface{}) bool
-}
-

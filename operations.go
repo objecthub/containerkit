@@ -41,23 +41,3 @@ type Comparison func (interface{}, interface{}) int
 
 // Binop functions compute a binary operation for the given two elements
 type Binop func (interface{}, interface{}) interface{}
-
-// Interface Hashable is implemented by values providing a HashCode method.
-// The default generic hash function uses this interface for values that
-// don't have a specific predefined hash function (e.g. structs)
-type Hashable interface {
-  HashCode() int
-}
-
-// Interface Comparable is implemented by values providing a Compare method.
-// The default generic comparison function uses this interface for values
-// that don't have a specific predefined comparison function (e.g. structs)
-type Comparable interface {
-  Compare(other interface{}) int
-}
-
-// Interface Indentifiable is implemented by values providing an Equals
-// method which returns true if the given value is equivalent.
-type Identifiable interface {
-  Equals(other interface{}) bool
-}

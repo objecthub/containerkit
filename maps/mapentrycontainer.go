@@ -18,8 +18,15 @@ import . "github.com/objecthub/containerkit"
 import "github.com/objecthub/containerkit/util"
 
 
+type MapEntry interface {
+  Key() interface{}
+  Value() interface{}
+  Pair() Pair
+  String() string
+}
+
 func KV(key, value interface{}) MapEntry {
-  return util.NewPair(key, value)
+  return NewPair(key, value)
 }
 
 func Invert(x interface{}) interface{} {
@@ -27,13 +34,6 @@ func Invert(x interface{}) interface{} {
     return KV(entry.Value(), entry.Key())
   }
   panic("InvertMapEntry expected a MapEntry value")
-}
-
-type MapEntry interface {
-  Key() interface{}
-  Value() interface{}
-  Pair() *util.Pair
-  String() string
 }
 
 type MapEntryContainerBase interface {

@@ -14,12 +14,18 @@
 
 package impl
 
+import . "github.com/objecthub/containerkit/util"
+
 
 func NewArray() Array {
   return make(Array, 0, 8)
 }
 
 type Array []interface{}
+
+func (this *Array) Capacity() int {
+  return cap(*this)
+}
 
 func (this *Array) Length() int {
   return len(*this)
@@ -37,6 +43,10 @@ func (this *Array) Append(val interface{}) {
   i := len(*this)
   this.Allocate(i, 1)
   (*this)[i] = val
+}
+
+func (this *Array) Extend(n int) {
+  this.Allocate(len(*this), n)
 }
 
 func (this *Array) Allocate(i int, n int) {
@@ -64,15 +74,35 @@ func (this *Array) Allocate(i int, n int) {
   }
 }
 
+func (this *Array) Clear() {
+  this.Delete(0, len(*this))
+}
+
+func (this *Array) Remove(n int) {
+  this.Delete(len(*this) - n, n)
+}
+
 func (this *Array) Delete(i int, n int) {
   l := len(*this) - n
   if l < 0 {
     panic("Array.delete: n too large")
-  } else if l == 0 {
-    *this = (*this)[:0]
-  } else {
+  } else if l < i {
+    panic("Array.delete: i too large")
+  } else if l > i {
     copy((*this)[i:l], (*this)[i + n:])
-    *this = (*this)[:l]
+  }
+  *this = (*this)[:l]
+}
+
+func (this *Array) Move(from int, to int, n int) {
+  if n < 0 {
+    panic("Array.Move: n negative")
+  } else if from < 0 || (from + n) > len(*this) {
+    panic("Array.Move: [from, from+n] out of range")
+  } else if to < 0 || (to + n) > len(*this) {
+    panic("Array.Move: [to, to+n] out of range")
+  } else if n > 0 {
+    copy((*this)[to:to + n], (*this)[from:from + n])
   }
 }
 
@@ -83,22 +113,44 @@ func (this *Array) Copy() Array {
 }
 
 func (this *Array) Iterator() *arrayIterator {
-  return &arrayIterator{*this, 0}
+  return this.ArrayIterator(0, len(*this), Inc)
+}
+
+func (this *Array) ReverseIterator() *arrayIterator {
+  return this.ArrayIterator(len(*this) - 1, -1, Dec)
+}
+
+func (this *Array) ArrayIterator(start, end int, inc func (int) int) *arrayIterator {
+  return &arrayIterator{*this, start, end, inc}
+}
+
+func (this *Array) String() string {
+  sb := NewStringBuilder("[")
+  if len(*this) > 0 {
+    sb.Append((*this)[0])
+    for i := 1; i < len(*this); i++ {
+      sb.Append(", ", (*this)[i])
+    }
+  }
+  sb.Append("](", cap(*this), ")")
+  return sb.String()
 }
 
 type arrayIterator struct {
   a Array
   i int
+  end int
+  inc func (int) int
 }
 
 func (this *arrayIterator) HasNext() bool {
-  return this.i < len(this.a)
+  return this.i != this.end
 }
 
 func (this *arrayIterator) Next() interface{} {
   if this.HasNext() {
     res := this.a[this.i]
-    this.i++
+    this.i = this.inc(this.i)
     return res
   }
   panic("ArrayIterator.Next: no next element")
