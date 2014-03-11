@@ -22,8 +22,7 @@ var ListSequence MutableSequenceClass = &listSequenceClass{}
 
 var ImmutableListSequence SequenceClass = ImmutableSequence(ListSequence)
 
-type listSequenceClass struct {
-}
+type listSequenceClass struct {}
 
 func (this *listSequenceClass) Embed(obj MutableSequence) MutableSequence {
   res := new(listSequence)

@@ -15,10 +15,6 @@
 package containerkit
 
 
-type Enumeration interface {
-  FiniteContainer
-}
-
 var Enum enumClass = enumClass{newEnum()}
 
 type enumClass struct {
@@ -84,9 +80,8 @@ func (this *enumIterator) HasNext() bool {
 
 func (this *enumIterator) Next() interface{} {
   if this.HasNext() {
-    res := this.a[this.i]
     this.i++
-    return res
+    return this.a[this.i - 1]
   }
   panic("enumIterator.Next: no next element")
 }
