@@ -15,7 +15,6 @@
 package sets
 
 import . "github.com/objecthub/containerkit"
-import "github.com/objecthub/containerkit/util"
 
 
 // MutableSetBase defines minimal functionality that is required for
@@ -88,7 +87,7 @@ func (this *mutableSetTrait) ExcludeFrom(coll Container) {
 }
 
 func (this *mutableSetTrait) IntersectWith(coll Container) {
-  this.obj.ExcludeIf(util.Negate(this.obj.Class().From(coll).Func()))
+  this.obj.ExcludeIf(Negate(this.obj.Class().From(coll).Func()))
 }
 
 func (this *mutableSetTrait) ExcludeIf(pred Predicate) {

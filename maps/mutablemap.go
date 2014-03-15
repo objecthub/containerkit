@@ -37,6 +37,7 @@ type MutableMapDerived interface {
   MutableMapFactoryDerived
   IncludeEntry(entries ...MapEntry)
   IncludeFrom(entries Container)
+  IncludeFromNative(mp map[interface{}] interface{})
   ExcludeKeys(keys Container)
 }
 
@@ -54,6 +55,7 @@ type MutableMapClass interface {
   Embed(obj MutableMap) MutableMap
   New(entries... MapEntry) MutableMap
   From(coll Container) MutableMap
+  FromNative(mp map[interface{}] interface{}) MutableMap
 }
 
 // EmbeddedMutableMap returns a new record that implements the MutableMap
@@ -86,6 +88,12 @@ func (this *mutableMap) IncludeFrom(entries Container) {
     } else {
       panic("mutableMap.IncludeEntry: not a MapEntry value")
     }
+  }
+}
+
+func (this *mutableMap) IncludeFromNative(mp map[interface{}] (interface{})) {
+  for key, value := range mp {
+    this.obj.Include(key, value)
   }
 }
 

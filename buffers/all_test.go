@@ -15,11 +15,12 @@
 package buffers
 
 import "testing"
+import "github.com/objecthub/containerkit"
 
 
-func checkQueueSize(t *testing.T, q Queue, size int, name string) {
-  qsize := q.Size()
-  if qsize != size {
-    t.Errorf("Expected size of queue %s to be %d; was %d", name, size, qsize)
+func checkSize(t *testing.T, c containerkit.Finite, size int, name string) {
+  csize := c.Size()
+  if csize != size {
+    t.Errorf("Expected size of queue %s to be %d; was %d", name, size, csize)
   }
 }

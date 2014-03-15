@@ -15,7 +15,6 @@
 package maps
 
 import . "github.com/objecthub/containerkit"
-import "github.com/objecthub/containerkit/util"
 
 
 type MapEntry interface {
@@ -27,13 +26,6 @@ type MapEntry interface {
 
 func KV(key, value interface{}) MapEntry {
   return NewPair(key, value)
-}
-
-func Invert(x interface{}) interface{} {
-  if entry, valid := x.(MapEntry); valid {
-    return KV(entry.Value(), entry.Key())
-  }
-  panic("InvertMapEntry expected a MapEntry value")
 }
 
 type MapEntryContainerBase interface {
@@ -87,11 +79,11 @@ func MapEntryPredicate(keyPred Predicate, valuePred Predicate) Predicate {
 }
 
 func KeyPredicate(pred Predicate) Predicate {
-  return MapEntryPredicate(pred, util.TruePredicate)
+  return MapEntryPredicate(pred, TruePredicate)
 }
 
 func ValuePredicate(pred Predicate) Predicate {
-  return MapEntryPredicate(util.TruePredicate, pred)
+  return MapEntryPredicate(TruePredicate, pred)
 }
 
 func ValueMapping(f Mapping) Mapping {

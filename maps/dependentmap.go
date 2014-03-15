@@ -16,7 +16,6 @@ package maps
 
 import . "github.com/objecthub/containerkit"
 import . "github.com/objecthub/containerkit/sets"
-import "github.com/objecthub/containerkit/util"
 
 
 type DependentMap interface {
@@ -97,7 +96,7 @@ func (this *extendedMap) Get(key interface{}) (value interface{}, exists bool) {
 func (this *extendedMap) Elements() Iterator {
   return NewCompositeIterator(
       this.overrides.Elements(),
-      NewFilterIterator(KeyPredicate(util.Negate(this.overrides.KeySet().Func())),
+      NewFilterIterator(KeyPredicate(Negate(this.overrides.KeySet().Func())),
                         this.base.Elements()))
 }
 

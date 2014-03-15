@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package util
+package containerkit
 
 import "math"
 
@@ -37,47 +37,8 @@ type Identifiable interface {
   Equals(other interface{}) bool
 }
 
-func Inc(i int) int {
-  return i + 1
-}
-
-func Dec(i int) int {
-  return i - 1
-}
-
-func TruePredicate(x interface{}) bool {
-  return true
-}
-
-func FalsePredicate(x interface{}) bool {
-  return false
-}
-
-func Negate(pred (func (interface{}) bool)) (func (interface{}) bool) {
-  return func (x interface{}) bool {
-    return !pred(x)
-  }
-}
-
-func InvertComparison(comp (func (interface{}, interface{}) int)) (func (interface{}, interface{}) int) {
-  return func (x, y interface{}) int {
-    return comp(y, x)
-  }
-}
-
-func Identity(x interface{}) interface{} {
-  return x
-}
-
-func UniversalEquality(x, y interface{}) bool {
-  if x != nil {
-    if left, valid := x.(Identifiable); valid {
-      return left.Equals(y)
-    }
-  }
-  return x == y
-}
-
+// UniversalHash computes a hash sum for the given object 'x'. Supported are all
+// native types as well as objects implementing method HashCode.
 func UniversalHash(x interface{}) int {
   switch val := x.(type) {
     case nil:
@@ -115,7 +76,64 @@ func UniversalHash(x interface{}) int {
   panic("UniversalHash: Unknown type")
 }
 
+// UniversalEquality is a function for determining whether two objects 'x' and 'y'
+// are equals. For objects of a predefined atomic type (bool, byte, int, ...), the
+// operator '==' is used for checking equality. If objects of all other types
+// (e.g struct) are implementing interface Identifiable, method 'equals' is used.
+// Otherwise, for objects implementing interface Comparable, method 'Compare' is used.
+// Otherwise, UniversalEquality fails.
+func UniversalEquality(x, y interface{}) bool {
+  switch this := x.(type) {
+    case nil:
+      return y == nil
+    case bool:
+      if that, valid := y.(bool); valid {
+        return this == that
+      }
+    case byte:
+      if that, valid := y.(byte); valid {
+        return this == that
+      }
+    case int:
+      if that, valid := y.(int); valid {
+        return this == that
+      }
+    case uint:
+      if that, valid := y.(uint); valid {
+        return this == that
+      }
+    case int32:
+      if that, valid := y.(int32); valid {
+        return this == that
+      }
+    case int64:
+      if that, valid := y.(int64); valid {
+        return this == that
+      }
+    case float32:
+      if that, valid := y.(float32); valid {
+        return this == that
+      }
+    case float64:
+      if that, valid := y.(float64); valid {
+        return this == that
+      }
+    case string:
+      if that, valid := y.(string); valid {
+        return this == that
+      }
+    case Identifiable:
+      return this.Equals(y)
+    case Comparable:
+      return this.Compare(y) == 0
+  }
+  panic("UniversalEquality: Illegal parameters")
+}
 
+// UniversalComparison is a function for comparing two objects 'x' and 'y'.
+// For objects of a predefined atomic type (bool, byte, int, ...), the operators
+// '==' and '<' are used for comparisons. Objects of all other types (e.g struct)
+// need to implement interface Comparable.
 func UniversalComparison(x, y interface{}) int {
   switch this := x.(type) {
     case nil:

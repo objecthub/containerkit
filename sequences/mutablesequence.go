@@ -16,7 +16,6 @@ package sequences
 
 import "sort"
 import . "github.com/objecthub/containerkit"
-import "github.com/objecthub/containerkit/util"
 
 
 type MutableSequenceBase interface {
@@ -169,7 +168,7 @@ func (this *mutableSequence) SortWith(comp Comparison) {
 }
 
 func (this *mutableSequence) Sort() {
-  this.obj.SortWith(util.UniversalComparison)
+  this.obj.SortWith(UniversalComparison)
 }
 
 type sortableSeq struct {

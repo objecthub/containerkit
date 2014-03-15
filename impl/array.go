@@ -14,7 +14,8 @@
 
 package impl
 
-import . "github.com/objecthub/containerkit/util"
+import . "github.com/objecthub/containerkit"
+import "github.com/objecthub/containerkit/util"
 
 
 func NewArray() Array {
@@ -125,7 +126,7 @@ func (this *Array) ArrayIterator(start, end int, inc func (int) int) *arrayItera
 }
 
 func (this *Array) String() string {
-  sb := NewStringBuilder("[")
+  sb := util.NewStringBuilder("[")
   if len(*this) > 0 {
     sb.Append((*this)[0])
     for i := 1; i < len(*this); i++ {

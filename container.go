@@ -105,19 +105,19 @@ func (this *container) ForEach(proc Procedure) {
 }
 
 func (this *container) Drop(n int) DependentContainer {
-  return newSlicedContainer(this.obj, n, util.FalsePredicate, util.TruePredicate, 0)
+  return newSlicedContainer(this.obj, n, FalsePredicate, TruePredicate, 0)
 }
 
 func (this *container) DropWhile(pred Predicate) DependentContainer {
-  return newSlicedContainer(this.obj, 0, pred, util.TruePredicate, 0)
+  return newSlicedContainer(this.obj, 0, pred, TruePredicate, 0)
 }
 
 func (this *container) Take(n int) DependentContainer {
-  return newSlicedContainer(this.obj, 0, util.FalsePredicate, util.FalsePredicate, n)
+  return newSlicedContainer(this.obj, 0, FalsePredicate, FalsePredicate, n)
 }
 
 func (this *container) TakeWhile(pred Predicate) DependentContainer {
-  return newSlicedContainer(this.obj, 0, util.FalsePredicate, pred, 0)
+  return newSlicedContainer(this.obj, 0, FalsePredicate, pred, 0)
 }
 
 func (this *container) Filter(pred Predicate) DependentContainer {

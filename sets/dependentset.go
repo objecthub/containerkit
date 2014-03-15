@@ -15,7 +15,6 @@
 package sets
 
 import . "github.com/objecthub/containerkit"
-import "github.com/objecthub/containerkit/util"
 
 
 type DependentSet interface {
@@ -60,7 +59,7 @@ func (this *unionSet) Contains(elem interface{}) bool {
 
 func (this *unionSet) Elements() Iterator {
   return NewCompositeIterator(
-      NewFilterIterator(util.Negate(this.snd.Func()), this.fst.Elements()),
+      NewFilterIterator(Negate(this.snd.Func()), this.fst.Elements()),
       this.snd.Elements())
 }
 
@@ -117,7 +116,7 @@ func (this *differenceSet) Contains(elem interface{}) bool {
 }
 
 func (this *differenceSet) Elements() Iterator {
-  return NewFilterIterator(util.Negate(this.snd.Func()), this.fst.Elements())
+  return NewFilterIterator(Negate(this.snd.Func()), this.fst.Elements())
 }
 
 // Set proxy (to hide potential functionality for mutating the set)

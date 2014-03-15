@@ -16,13 +16,12 @@ package buffers
 
 import . "github.com/objecthub/containerkit"
 import . "github.com/objecthub/containerkit/impl"
-import "github.com/objecthub/containerkit/util"
 
 
-var PriorityQueue QueueClass = PriorityQueueClass(util.UniversalComparison)
+var PriorityQueue QueueClass = PriorityQueueClass(UniversalComparison)
 
 var ReversePriorityQueue QueueClass =
-    PriorityQueueClass(util.InvertComparison(util.UniversalComparison))
+    PriorityQueueClass(InvertComparison(UniversalComparison))
 
 func PriorityQueueClass(comp Comparison) QueueClass {
   return &priorityQueueClass{comp}

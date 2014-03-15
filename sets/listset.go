@@ -16,10 +16,9 @@ package sets
 
 import . "github.com/objecthub/containerkit"
 import . "github.com/objecthub/containerkit/impl"
-import "github.com/objecthub/containerkit/util"
 
 
-var ListSet MutableSetClass = ListSetClass(util.UniversalEquality)
+var ListSet MutableSetClass = ListSetClass(UniversalEquality)
 
 var ImmutableListSet SetClass = ImmutableSet(ListSet)
 

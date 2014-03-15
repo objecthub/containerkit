@@ -14,9 +14,9 @@
 
 package maps
 
-import "sync"
 import . "github.com/objecthub/containerkit"
 import . "github.com/objecthub/containerkit/sets"
+import "sync"
 
 
 func SynchronizedMap(class MutableMapClass) MutableMapClass {
@@ -48,6 +48,12 @@ func (this *synchronizedMapClass) New(entries... MapEntry) MutableMap {
 func (this *synchronizedMapClass) From(coll Container) MutableMap {
   res := this.Embed(nil)
   res.IncludeFrom(coll)
+  return res
+}
+
+func (this *synchronizedMapClass) FromNative(mp map[interface{}] interface{}) MutableMap {
+  res := this.Embed(nil)
+  res.IncludeFromNative(mp)
   return res
 }
 
@@ -131,6 +137,12 @@ func (this *synchronizedMap) IncludeFrom(entries Container) {
   this.mutex.Lock()
   defer this.mutex.Unlock()
   this.unsync.IncludeFrom(entries)
+}
+
+func (this *synchronizedMap) IncludeFromNative(mp map[interface{}] interface{}) {
+  this.mutex.Lock()
+  defer this.mutex.Unlock()
+  this.unsync.IncludeFromNative(mp)
 }
 
 func (this *synchronizedMap) ExcludeKeys(keys Container) {

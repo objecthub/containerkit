@@ -16,10 +16,9 @@ package sets
 
 import . "github.com/objecthub/containerkit"
 import . "github.com/objecthub/containerkit/impl"
-import "github.com/objecthub/containerkit/util"
 
 
-var HashSet MutableSetClass = HashSetClass(util.UniversalHash, util.UniversalEquality)
+var HashSet MutableSetClass = HashSetClass(UniversalHash, UniversalEquality)
 
 var ImmutableHashSet SetClass = ImmutableSet(HashSet)
 

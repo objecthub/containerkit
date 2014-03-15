@@ -15,11 +15,10 @@
 package maps
 
 import . "github.com/objecthub/containerkit"
-import . "github.com/objecthub/containerkit/impl"
-import "github.com/objecthub/containerkit/util"
+import "github.com/objecthub/containerkit/impl"
 
 
-var HashMap MutableMapClass = HashMapClass(util.UniversalHash, util.UniversalEquality)
+var HashMap MutableMapClass = HashMapClass(UniversalHash, UniversalEquality)
 
 var ImmutableHashMap MapClass = ImmutableMap(HashMap)
 
@@ -39,7 +38,7 @@ func (this *hashMapClass) Embed(obj MutableMap) MutableMap {
   }
   res.obj = obj
   res.MutableMapDerived = EmbeddedMutableMap(obj)
-  res.table = NewHashTable(17, 80, this.hash, this.equals)
+  res.table = impl.NewHashTable(17, 80, this.hash, this.equals)
   return res
 }
 
@@ -55,6 +54,12 @@ func (this *hashMapClass) From(coll Container) MutableMap {
   return res
 }
 
+func (this *hashMapClass) FromNative(mp map[interface{}] interface{}) MutableMap {
+  res := this.Embed(nil)
+  res.IncludeFromNative(mp)
+  return res
+}
+
 type MutableHashMap interface {
   MutableMap
   Print()
@@ -62,7 +67,7 @@ type MutableHashMap interface {
 
 type hashMap struct {
   obj MutableMap
-  table *HashTable
+  table *impl.HashTable
   MutableMapDerived
 }
 
@@ -104,7 +109,7 @@ func (this *hashMap) Clear() {
 }
 
 type hashMapIterator struct {
-  hashEntryIter *HashEntryIterator
+  hashEntryIter *impl.HashEntryIterator
 }
 
 func (this *hashMapIterator) HasNext() bool {

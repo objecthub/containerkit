@@ -15,6 +15,10 @@
 package containerkit
 
 
+// ============================================================================
+// FUNCTION TYPES
+// ============================================================================
+
 // Procedures consume an element and produce side-effects using this element
 type Procedure func (interface{})
 
@@ -39,5 +43,54 @@ type Hashfunction func (interface{}) int
 //   +1, if a > b
 type Comparison func (interface{}, interface{}) int
 
-// Binop functions compute a binary operation for the given two elements
+// Binop functions compute a binary operation for the given two parameters
 type Binop func (interface{}, interface{}) interface{}
+
+// Incrementor functions compute a successor for a given integer
+type Incrementor func (int) int
+
+
+// ============================================================================
+// DEFAULT FUNCTION IMPLEMENTATIONS
+// ============================================================================
+
+// Identity defines an identity mapping function
+func Identity(x interface{}) interface{} {
+  return x
+}
+
+// InvertComparison returns a new inverted Comparison function for the given
+// Comparison function
+func InvertComparison(comp Comparison) Comparison {
+  return func (x, y interface{}) int {
+    return comp(y, x)
+  }
+}
+
+// Inc defines an incrementor function which increments the parameter by one
+func Inc(i int) int {
+  return i + 1
+}
+
+// Dec defines an incrementor function which decrements the parameter by one
+func Dec(i int) int {
+  return i - 1
+}
+
+// TruePredicate defines a predicate function which always returns true
+func TruePredicate(x interface{}) bool {
+  return true
+}
+
+// FalsePredicate defines a predicate function which always returns false
+func FalsePredicate(x interface{}) bool {
+  return false
+}
+
+// Negate defines a function which given a predicate, returns the negated version
+// of this predicate
+func Negate(pred Predicate) Predicate {
+  return func (x interface{}) bool {
+    return !pred(x)
+  }
+}
