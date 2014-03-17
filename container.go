@@ -24,7 +24,7 @@ import "github.com/objecthub/containerkit/util"
 // method. Those methods are available to all abstractions that
 // embedd the Container trait.
 // 
-// This file implements the Container trait, ie. it specifies
+// This file implements the Container trait, i.e. it specifies
 // how the methods in ContainerDerived are getting defined in terms
 // of functionality provided by ContainerBase. All functionality in
 // ContainerDerived is lazily creating a new Container on top of
@@ -43,25 +43,77 @@ type ContainerBase interface {
 
 // The derived functionality implemented by the Container trait
 type ContainerDerived interface {
+
+  // IsEmpty returns true if the container is empty, i.e. has no elements.
   IsEmpty() bool
+  
+  // Exists returns true if there is at least one element for which the given
+  // predicate is true.
   Exists(pred Predicate) bool
+  
+  // ForAll returns true if the given predicate is true for all elements.
   ForAll(pred Predicate) bool
+  
+  // ForEach executes the given procedure for all elements.
   ForEach(proc Procedure)
-  Take(n int) DependentContainer
-  TakeWhile(pred Predicate) DependentContainer
-  Drop(n int) DependentContainer
-  DropWhile(pred Predicate) DependentContainer
+  
+  // Filter returns a dependent container containing all elements for which the given
+  // predicate is true.
   Filter(pred Predicate) DependentContainer
+  
+  // Take returns a dependent container encapsulating n elements; it is the first
+  // n elements returned from the Elements iterator.
+  Take(n int) DependentContainer
+  
+  // TakeWhile returns a dependent container into which elements are put as long as
+  // the predicate returns true.
+  TakeWhile(pred Predicate) DependentContainer
+  
+  // Drop returns a dependent container which contains all elements except for the
+  // first n elements returned by the Elements iterator
+  Drop(n int) DependentContainer
+  
+  // DropWhile returns a dependent container into which all elements are put, except
+  // for the first elements for which the given predicate returns true.
+  DropWhile(pred Predicate) DependentContainer
+  
+  // Map maps all elements into a new container by applying the given mapping function.
   Map(f Mapping) DependentContainer
+  
+  // FlatMap applies the given generator to each element and concatenates the
+  // containers resulting from the generator invokations.
   FlatMap(g Generator) DependentContainer
+  
+  // Flatten turns a container of containers into a flat container by concatenating
+  // the individual containers.
   Flatten() DependentContainer
+  
+  // Concat returns a dependent container which contains both the elements from
+  // this and the other container.
   Concat(other Container) DependentContainer
+  
+  // Combine returns a dependent container which combines elements from this and the
+  // other container by applying the given binary operation.
   Combine(f Binop, other Container) DependentContainer
+
+  // Zip returns a dependent container which combines elements from this and the
+  // other container as Pair objects.
   Zip(other Container) DependentContainer
+  
+  // FoldLeft aggregates the elements {e1, e2, e3, ..., en} of this container by
+  // applying the given binary operation f in the following way:
+  // f(... f(f(f(z, e1), e2), e3), ... en)
   FoldLeft(f Binop, z interface{}) interface{}
+  
+  // FoldRight aggregates the elements {e1, e2, e3, ..., en} of this container by
+  // applying the given binary operation f in the following way:
+  // f(e1, f(e2, f(e3, ... f(en, z) ...)))
   FoldRight(f Binop, z interface{}) interface{}
+  
   Force() FiniteContainer
   Freeze() FiniteContainer
+  
+  // String returns a textual representation of this container.
   String() string
 }
 
@@ -134,7 +186,13 @@ func (this *container) FlatMap(g Generator) DependentContainer {
 
 func (this *container) Flatten() DependentContainer {
   return this.obj.FlatMap(func (x interface{}) Iterator {
-    return x.(Iterator)
+    switch e := x.(type) {
+      case nil:
+        return EmptyIterator
+      case ContainerBase:
+        return e.Elements()
+    }
+    panic("Container.Flatten: element is not a container")
   })
 }
 

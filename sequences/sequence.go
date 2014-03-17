@@ -24,11 +24,11 @@ type SequenceBase interface {
 type SequenceDerived interface {
   IndexedDerived
   Container
-  ReadOnly() DependentSequence
   Subsequence(start int, maxSize int) DependentSequence
   MapValues(f Mapping) DependentSequence
   Reverse() DependentSequence
   Join(other Sequence) DependentSequence
+  ReadOnly() DependentSequence
 }
 
 type Sequence interface {
@@ -74,12 +74,12 @@ func (this *sequenceTrait) MapValues(f Mapping) DependentSequence {
   return newMappedSequence(this.obj, f)
 }
 
-func (this *sequenceTrait) ReadOnly() DependentSequence {
-  return wrappedSequence(this.obj, false)
-}
-
 func (this *sequenceTrait) Join(other Sequence) DependentSequence {
   return newAppendedSequence(this.obj, other)
+}
+
+func (this *sequenceTrait) ReadOnly() DependentSequence {
+  return wrappedSequence(this.obj, false)
 }
 
 func (this *sequenceTrait) String() string {
