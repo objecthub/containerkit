@@ -15,35 +15,64 @@
 package containerkit
 
 
-type DependentContainerBase interface {
-  ContainerBase
-}
+// ============================================================================
+// INTERFACE
+// ============================================================================
 
-type DependentContainerDerived interface {
-  ContainerDerived
-  first() Container
-  second() Container
-}
-
-// Dependent containers typically do not encapsulate mutable
-// state. Their elements are derived from the state provided by non-dependent
-// containers.
+// DependentContainer implementations do not encapsulate mutable state. The elements
+// of dependent containers are derived from the state provided by other containers.
+// Every time an element gets accessed, the content of a dependent container gets
+// recomputed from scratch, but only as needed by the operation.
+// 
+// DependentContainer extends Container, i.e. it inherits both the base and the
+// derived functionality from Container.
 type DependentContainer interface {
   DependentContainerBase
   DependentContainerDerived
 }
 
+// The base functionality required for all DependentContainer implementations.
+// This corresponds to the base functionality of Container.
+type DependentContainerBase interface {
+
+  // Inherited from Container
+  ContainerBase
+}
+
+// The derived functionality implemented by the DependentContainer trait.
+// This corresponds to the derived functionality of Container. In addition, two
+// access functions to the containers from which the dependent container is derived
+// are provided.
+type DependentContainerDerived interface {
+
+  // Inherited from Container
+  ContainerDerived
+  
+  // Returns the first Container from which this DependentContainer gets derived.
+  first() Container
+  
+  // Returns the second Container from which this DependentContainer gets derived.
+  // If there is no second container, this method returns nil.
+  second() Container
+}
+
+// Function for embedding the DependentContainer trait into another abstraction
 func EmbeddedDependentContainer(obj DependentContainer,
-                                 first Container,
-                                 second Container) DependentContainer {
+                                first Container,
+                                second Container) DependentContainer {
   return &dependentContainerTrait{obj, EmbeddedContainer(obj), first, second}
 }
 
+
+// ============================================================================
+// IMPLEMENTATION
+// ============================================================================
+
 type dependentContainerTrait struct {
-  obj DependentContainer
-  Container
-  fst Container
-  snd Container
+  obj DependentContainer  // The identify of the container abstraction
+  Container               // The inherited Container functionality
+  fst Container           // Container based on which this DependentContainer is defined
+  snd Container           // Container based on which this DependentContainer is defined
 }
 
 func (this *dependentContainerTrait) first() Container {
@@ -61,8 +90,11 @@ func (this *dependentContainerTrait) String() string {
 
 // Sliced containers
 
-func newSlicedContainer(base Container, drop int, dropWhile Predicate,
-                         takeWhile Predicate, take int) DependentContainer {
+func newSlicedContainer(base Container,
+                        drop int,
+                        dropWhile Predicate,
+                        takeWhile Predicate,
+                        take int) DependentContainer {
   res := new(slicedContainer)
   res.drop = drop
   res.dropWhile = dropWhile

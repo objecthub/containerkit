@@ -15,24 +15,34 @@
 package containerkit
 
 
+// ============================================================================
+// INTERFACE
+// ============================================================================
+
+// FiniteContainer obejcts are containers with a finite number of elements.
+// Method Size returns the number of elements encapsulated by the container.
+type FiniteContainer interface {
+  FiniteContainerBase
+  FiniteContainerDerived
+}
+
+// Finite is implemented by all objects providing a Size() method
 type Finite interface {
   Size() int
 }
 
+// The base functionality required for all FiniteContainer implementations. This
+// corresponds to the methods required for Container objects as well as the method
+// defined by interface Finite.
 type FiniteContainerBase interface {
   ContainerBase
   Finite
 }
 
+// The derived functionality implemented by the FiniteContainer trait.
+// This corresponds to the derived functionality of Container.
 type FiniteContainerDerived interface {
   ContainerDerived
-}
-
-// Finite containers are containers with a finite number of elements.
-// Method Size returns the number of elements encapsulated by the container.
-type FiniteContainer interface {
-  FiniteContainerBase
-  FiniteContainerDerived
 }
 
 type FiniteContainerClass interface {
@@ -45,16 +55,21 @@ func EmbeddedFiniteContainer(obj FiniteContainer) FiniteContainer {
   return &finiteContainer{obj, obj, EmbeddedContainer(obj)}
 }
 
+
+// ============================================================================
+// IMPLEMENTATION
+// ============================================================================
+
 type finiteContainer struct {
   obj FiniteContainer
   FiniteContainerBase
   FiniteContainerDerived
 }
 
-func (this *finiteContainer) Force() FiniteContainer {
-  return this.obj
-}
-
 func (this *finiteContainer) IsEmpty() bool {
   return this.obj.Size() == 0
+}
+
+func (this *finiteContainer) Force() FiniteContainer {
+  return this.obj
 }

@@ -17,7 +17,11 @@ package containerkit
 import "github.com/objecthub/containerkit/util"
 
 
-// A Container is encapsulating a set of elements. All containers
+// ============================================================================
+// INTERFACE
+// ============================================================================
+
+// Container is encapsulating a set of elements. All containers
 // provide an Elements() method that returns an iterator over all
 // elements of the container. The framework derives a number of
 // methods like Exists, Forall, ForEach, etc.from the Elements
@@ -36,9 +40,16 @@ type Container interface {
   ContainerDerived
 }
 
-// The base functionality required for all Container implementations
-type ContainerBase interface {
+// Iterable is implemented by all objects providing an Elements method returning
+// an iterator over a number of values.
+type Iterable interface {
   Elements() Iterator
+}
+
+// The base functionality required for all Container implementations is defined in
+// terms of the Iterable interface
+type ContainerBase interface {
+  Iterable
 }
 
 // The derived functionality implemented by the Container trait
@@ -121,6 +132,11 @@ type ContainerDerived interface {
 func EmbeddedContainer(obj Container) Container {
   return &container{obj, obj}
 }
+
+
+// ============================================================================
+// IMPLEMENTATION
+// ============================================================================
 
 // Implementation of the Container trait.
 type container struct {

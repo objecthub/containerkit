@@ -15,10 +15,19 @@
 package containerkit
 
 
+// ============================================================================
+// INTERFACE
+// ============================================================================
+
 type Iterator interface {
   HasNext() bool
   Next() interface{}
 }
+
+
+// ============================================================================
+// IMPLEMENTATION
+// ============================================================================
 
 func CountElements(iter Iterator) int {
   res := 0
@@ -29,10 +38,29 @@ func CountElements(iter Iterator) int {
   return res
 }
 
+
+// Empty iterator
+
+var EmptyIterator Iterator = new(emptyIterator)
+
+type emptyIterator struct {}
+
+func (this emptyIterator) HasNext() bool {
+  return false
+}
+
+func (this emptyIterator) Next() interface{} {
+  panic("EmptyIterator: no next element")
+}
+
+
 // Slice iterators
 
-func NewSlicedIterator(iter Iterator, drop int, dropWhile Predicate,
-                       takeWhile Predicate, take int) Iterator {
+func NewSlicedIterator(iter Iterator,
+                       drop int,
+                       dropWhile Predicate,
+                       takeWhile Predicate,
+                       take int) Iterator {
   // drop initial elements
   for i := 0; i < drop; i++ {
     if iter.HasNext() {
@@ -90,6 +118,7 @@ func (this *slicedIterator) Next() interface{} {
   panic("slicedIterator: no next element")
 }
 
+
 // Filter iterators
 
 func NewFilterIterator(pred Predicate, iter Iterator) Iterator {
@@ -130,6 +159,7 @@ func (this *filteredIterator) Next() interface{} {
   panic("filteredIterator.Next: no next element")
 }
 
+
 // Map iterators
 
 func NewMappedIterator(f Mapping, iter Iterator) Iterator {
@@ -151,6 +181,7 @@ func (this *mappedIterator) Next() interface{} {
   }
   panic("mappedIterator.Next: no next element")
 }
+
 
 // Flat-map iterators
 
@@ -189,6 +220,7 @@ func (this *flatMappedIterator) Next() interface{} {
   panic("flatMappedIterator.Next: no next element")
 }
 
+
 // Composite iterators
 
 func NewCompositeIterator(first Iterator, second Iterator) Iterator {
@@ -213,6 +245,7 @@ func (this *compositeIterator) Next() interface{} {
   panic("compositeIterator.Next: no next element")
 }
 
+
 // Combination iterator
 
 type combinedIterator struct {
@@ -230,18 +263,4 @@ func (this *combinedIterator) Next() interface{} {
     return this.f(this.first.Next(), this.second.Next())
   }
   panic("combinedIterator.Next: no next element")
-}
-
-// Empty iterator
-
-var EmptyIterator Iterator = new(emptyIterator)
-
-type emptyIterator struct {}
-
-func (this emptyIterator) HasNext() bool {
-  return false
-}
-
-func (this emptyIterator) Next() interface{} {
-  panic("EmptyIterator: no next element")
 }

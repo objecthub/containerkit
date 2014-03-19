@@ -22,8 +22,7 @@ var ArraySequence MutableSequenceClass = &arraySequenceClass{}
 
 var ImmutableArraySequence SequenceClass = ImmutableSequence(ArraySequence)
 
-type arraySequenceClass struct {
-}
+type arraySequenceClass struct {}
 
 func (this *arraySequenceClass) Embed(obj MutableSequence) MutableSequence {
   res := new(arraySequence)
