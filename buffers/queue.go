@@ -46,29 +46,29 @@ type QueueClass interface {
 }
 
 func EmbeddedQueue(obj Queue) Queue {
-  return &queueTrait{obj, obj, EmbeddedFiniteContainer(obj)}
+  return &queue{obj, obj, EmbeddedFiniteContainer(obj)}
 }
 
-type queueTrait struct {
+type queue struct {
   obj Queue
   QueueBase
   FiniteContainerDerived
 }
 
-func (this *queueTrait) EnqueueFrom(coll Container) {
+func (this *queue) EnqueueFrom(coll Container) {
   for iter := coll.Elements(); iter.HasNext(); {
     this.obj.Enqueue(iter.Next())
   }
 }
 
-func (this *queueTrait) Copy() Queue {
+func (this *queue) Copy() Queue {
   return this.obj.Class().From(this.obj)
 }
 
-func (this *queueTrait) Force() FiniteContainer {
+func (this *queue) Force() FiniteContainer {
   return this.obj
 }
 
-func (this *queueTrait) String() string {
+func (this *queue) String() string {
   return "[" + this.FiniteContainerDerived.String() + "]"
 }

@@ -18,10 +18,9 @@ import . "github.com/objecthub/containerkit"
 import . "github.com/objecthub/containerkit/impl"
 
 
-var ArrayQueue QueueClass = &arrayQueueClass{}
+var ArrayQueue *arrayQueueClass = &arrayQueueClass{}
 
-type arrayQueueClass struct {
-}
+type arrayQueueClass struct {}
 
 func (this *arrayQueueClass) Embed(obj Queue) Queue {
   res := new(arrayQueue)

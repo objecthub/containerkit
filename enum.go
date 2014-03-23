@@ -15,7 +15,7 @@
 package containerkit
 
 
-var Enum enumClass = enumClass{newEnum()}
+var Enum *enumClass = &enumClass{newEnum()}
 
 type enumClass struct {
   empty FiniteContainer
@@ -52,7 +52,7 @@ func (this *enumClass) Range(start, end int) FiniteContainer {
 
 func newEnum() *enum {
   res := new(enum)
-  res.FiniteContainerDerived = EmbeddedContainer(res)
+  res.FiniteContainerDerived = EmbeddedFiniteContainer(res)
   return res
 }
 

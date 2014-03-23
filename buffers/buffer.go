@@ -18,6 +18,11 @@ import . "github.com/objecthub/containerkit"
 import . "github.com/objecthub/containerkit/sequences"
 
 
+type Buffer interface {
+  BufferBase
+  BufferDerived
+}
+
 type BufferBase interface {
   SequenceBase
   Append(elem ...interface{}) Buffer
@@ -29,11 +34,6 @@ type BufferDerived interface {
   SequenceDerived
   AppendFrom(coll Container) Buffer
   Copy() Buffer
-}
-
-type Buffer interface {
-  BufferBase
-  BufferDerived
 }
 
 // BufferClass defines the interface for embedding and

@@ -18,10 +18,9 @@ import . "github.com/objecthub/containerkit"
 import . "github.com/objecthub/containerkit/impl"
 
 
-var ListBuffer BufferClass = &listBufferClass{}
+var ListBuffer *listBufferClass = &listBufferClass{}
 
-type listBufferClass struct {
-}
+type listBufferClass struct {}
 
 func (this *listBufferClass) Embed(obj Buffer) Buffer {
   res := new(listBuffer)

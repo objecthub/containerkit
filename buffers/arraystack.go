@@ -31,7 +31,7 @@ import . "github.com/objecthub/containerkit"
 import . "github.com/objecthub/containerkit/impl"
 
 
-var ArrayStack StackClass = &arrayStackClass{}
+var ArrayStack *arrayStackClass = &arrayStackClass{}
 
 type arrayStackClass struct {}
 

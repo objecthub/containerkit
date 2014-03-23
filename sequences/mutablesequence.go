@@ -18,9 +18,14 @@ import "sort"
 import . "github.com/objecthub/containerkit"
 
 
+type MutableSequence interface {
+  MutableSequenceBase
+  MutableSequenceDerived
+}
+
 type MutableSequenceBase interface {
   SequenceBase
-  MutableSequenceFactoryBase
+  MutableSequenceClassProvider
   Set(index int, element interface{})
   Allocate(index int, n int, element interface{})
   Delete(index int, n int)
@@ -43,11 +48,6 @@ type MutableSequenceDerived interface {
   SortWith(comp Comparison)
   Sort()
   Clear()
-}
-
-type MutableSequence interface {
-  MutableSequenceBase
-  MutableSequenceDerived
 }
 
 // MutableSequenceClass defines the interface for embedding and

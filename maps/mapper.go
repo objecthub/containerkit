@@ -17,6 +17,11 @@ package maps
 import . "github.com/objecthub/containerkit/util"
 
 
+type Mapper interface {
+  MapperBase
+  MapperDerived
+}
+
 type MapperBase interface {
   Get(key interface{}) (value interface{}, exists bool)
 }
@@ -26,11 +31,6 @@ type MapperDerived interface {
   GetValue(key interface{}) interface{}
   GetString(key interface{}) string
   Func() func (interface{}) interface{}
-}
-
-type Mapper interface {
-  MapperBase
-  MapperDerived
 }
 
 func EmbeddedMapper(obj Mapper) Mapper {

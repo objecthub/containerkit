@@ -46,29 +46,29 @@ type StackClass interface {
 }
 
 func EmbeddedStack(obj Stack) Stack {
-  return &stackTrait{obj, obj, EmbeddedFiniteContainer(obj)}
+  return &stack{obj, obj, EmbeddedFiniteContainer(obj)}
 }
 
-type stackTrait struct {
+type stack struct {
   obj Stack
   StackBase
   FiniteContainerDerived
 }
 
-func (this *stackTrait) PushFrom(coll Container) {
+func (this *stack) PushFrom(coll Container) {
   for iter := coll.Elements(); iter.HasNext(); {
     this.obj.Push(iter.Next())
   }
 }
 
-func (this *stackTrait) Copy() Stack {
+func (this *stack) Copy() Stack {
   return this.obj.Class().From(this.obj)
 }
 
-func (this *stackTrait) Force() FiniteContainer {
+func (this *stack) Force() FiniteContainer {
   return this.obj
 }
 
-func (this *stackTrait) String() string {
+func (this *stack) String() string {
   return "[" + this.FiniteContainerDerived.String() + "]"
 }

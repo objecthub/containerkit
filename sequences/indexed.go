@@ -17,6 +17,11 @@ package sequences
 import . "github.com/objecthub/containerkit"
 
 
+type Indexed interface {
+  IndexedBase
+  IndexedDerived
+}
+
 type IndexedBase interface {
   Finite
   At(index int) interface{}
@@ -30,11 +35,6 @@ type IndexedDerived interface {
   Func() func (int) interface{}
   NativeMap() map[int] interface{}
   Array() []interface{}
-}
-
-type Indexed interface {
-  IndexedBase
-  IndexedDerived
 }
 
 func EmbeddedIndexed(obj Indexed) Indexed {

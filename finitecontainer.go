@@ -45,12 +45,6 @@ type FiniteContainerDerived interface {
   ContainerDerived
 }
 
-type FiniteContainerClass interface {
-  Embed(obj FiniteContainer) FiniteContainer
-  New(elements ...interface{}) FiniteContainer
-  From(coll Container) FiniteContainer
-}
-
 func EmbeddedFiniteContainer(obj FiniteContainer) FiniteContainer {
   return &finiteContainer{obj, obj, EmbeddedContainer(obj)}
 }
@@ -63,7 +57,7 @@ func EmbeddedFiniteContainer(obj FiniteContainer) FiniteContainer {
 type finiteContainer struct {
   obj FiniteContainer
   FiniteContainerBase
-  FiniteContainerDerived
+  ContainerDerived
 }
 
 func (this *finiteContainer) IsEmpty() bool {

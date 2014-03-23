@@ -22,19 +22,19 @@ type DependentSequence interface {
 }
 
 func EmbeddedDependentSequence(obj DependentSequence) SequenceDerived {
-  return &dependentSequenceTrait{obj, EmbeddedSequence(obj)}
+  return &dependentSequence{obj, EmbeddedSequence(obj)}
 }
 
-type dependentSequenceTrait struct {
+type dependentSequence struct {
   obj DependentSequence
   SequenceDerived
 }
 
-func (this *dependentSequenceTrait) ReadOnly() DependentSequence {
+func (this *dependentSequence) ReadOnly() DependentSequence {
   return this.obj
 }
 
-func (this *dependentSequenceTrait) String() string {
+func (this *dependentSequence) String() string {
   return "<" + this.SequenceDerived.String() + ">"
 }
 

@@ -17,6 +17,11 @@ package sequences
 import . "github.com/objecthub/containerkit"
 
 
+type Sequence interface {
+  SequenceBase
+  SequenceDerived
+}
+
 type SequenceBase interface {
   IndexedBase
 }
@@ -31,11 +36,6 @@ type SequenceDerived interface {
   ReadOnly() DependentSequence
 }
 
-type Sequence interface {
-  SequenceBase
-  SequenceDerived
-}
-
 // SequenceClass defines the interface for embedding and
 // instantiating implementations of the Sequence interface.
 type SequenceClass interface {
@@ -45,45 +45,45 @@ type SequenceClass interface {
 }
 
 func EmbeddedSequence(obj Sequence) Sequence {
-  return &sequenceTrait{obj,
-                        obj,
-                        EmbeddedIndexed(obj),
-                        EmbeddedFiniteContainer(obj)}
+  return &sequence{obj,
+                   obj,
+                   EmbeddedIndexed(obj),
+                   EmbeddedFiniteContainer(obj)}
 }
 
-type sequenceTrait struct {
+type sequence struct {
   obj Sequence
   SequenceBase
   IndexedDerived
-  ContainerDerived
+  FiniteContainerDerived
 }
 
-func (this *sequenceTrait) Elements() Iterator {
+func (this *sequence) Elements() Iterator {
   return &sequenceIterator{this.obj, 0}
 }
 
-func (this *sequenceTrait) Reverse() DependentSequence {
+func (this *sequence) Reverse() DependentSequence {
   return newReversedSequence(this.obj)
 }
 
-func (this *sequenceTrait) Subsequence(start int, maxSize int) DependentSequence {
+func (this *sequence) Subsequence(start int, maxSize int) DependentSequence {
   return newSubsequence(this.obj, start, maxSize)
 }
 
-func (this *sequenceTrait) MapValues(f Mapping) DependentSequence {
+func (this *sequence) MapValues(f Mapping) DependentSequence {
   return newMappedSequence(this.obj, f)
 }
 
-func (this *sequenceTrait) Join(other Sequence) DependentSequence {
+func (this *sequence) Join(other Sequence) DependentSequence {
   return newAppendedSequence(this.obj, other)
 }
 
-func (this *sequenceTrait) ReadOnly() DependentSequence {
+func (this *sequence) ReadOnly() DependentSequence {
   return wrappedSequence(this.obj, false)
 }
 
-func (this *sequenceTrait) String() string {
-  return "[" + this.ContainerDerived.String() + "]"
+func (this *sequence) String() string {
+  return "[" + this.FiniteContainerDerived.String() + "]"
 }
 
 type sequenceIterator struct {

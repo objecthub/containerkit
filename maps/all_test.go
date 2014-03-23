@@ -17,14 +17,9 @@ package maps
 import "testing"
 
 
-func TestHashMapClass(t *testing.T) {
-  m1 := HashMap.New()
-  checkSize(t, m1, 0, "m1")
-  m2 := HashMap.New(KV("one", 1))
-  checkSize(t, m2, 1, "m2")
-  m3 := HashMap.New(KV("one", 1), KV("two", 2))
-  checkSize(t, m3, 2, "m3")
-  m4 := HashMap.New(KV("one", 1), KV("two", 2), KV("three", 3), KV("four", 4), KV("five", 5),
-                    KV("six", 6), KV("seven", 7), KV("eight", 8), KV("nine", 9), KV("ten", 10))
-  checkSize(t, m4, 10, "m4")
+func checkSize(t *testing.T, m MutableMap, size int, name string) {
+  msize := m.Size()
+  if msize != size {
+    t.Errorf("Expected size of map %s to be %d; was %d", name, size, msize)
+  }
 }

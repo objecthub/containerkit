@@ -18,6 +18,11 @@ import . "github.com/objecthub/containerkit"
 import . "github.com/objecthub/containerkit/sets"
 
 
+type Map interface {
+  MapBase
+  MapDerived
+}
+
 type MapBase interface {
   FiniteContainerBase
   MapperBase
@@ -41,11 +46,6 @@ type MapClass interface {
   Embed(obj Map) Map
   New(entries... MapEntry) Map
   From(coll Container) Map
-}
-
-type Map interface {
-  MapBase
-  MapDerived
 }
 
 func EmbeddedMap(obj Map) Map {

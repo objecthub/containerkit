@@ -60,7 +60,7 @@ type DependentContainerDerived interface {
 func EmbeddedDependentContainer(obj DependentContainer,
                                 first Container,
                                 second Container) DependentContainer {
-  return &dependentContainerTrait{obj, EmbeddedContainer(obj), first, second}
+  return &dependentContainer{obj, EmbeddedContainer(obj), first, second}
 }
 
 
@@ -68,22 +68,22 @@ func EmbeddedDependentContainer(obj DependentContainer,
 // IMPLEMENTATION
 // ============================================================================
 
-type dependentContainerTrait struct {
+type dependentContainer struct {
   obj DependentContainer  // The identify of the container abstraction
   Container               // The inherited Container functionality
   fst Container           // Container based on which this DependentContainer is defined
   snd Container           // Container based on which this DependentContainer is defined
 }
 
-func (this *dependentContainerTrait) first() Container {
+func (this *dependentContainer) first() Container {
   return this.fst
 }
 
-func (this *dependentContainerTrait) second() Container {
+func (this *dependentContainer) second() Container {
   return this.snd
 }
 
-func (this *dependentContainerTrait) String() string {
+func (this *dependentContainer) String() string {
   return "<" + this.Container.String() + ">"
 }
 

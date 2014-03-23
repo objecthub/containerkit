@@ -18,10 +18,9 @@ import . "github.com/objecthub/containerkit"
 import . "github.com/objecthub/containerkit/impl"
 
 
-var ListStack StackClass = &listStackClass{}
+var ListStack *listStackClass = &listStackClass{}
 
-type listStackClass struct {
-}
+type listStackClass struct {}
 
 func (this *listStackClass) Embed(obj Stack) Stack {
   res := new(listStack)

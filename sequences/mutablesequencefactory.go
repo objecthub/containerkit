@@ -15,13 +15,18 @@
 package sequences
 
 
-type MutableSequenceFactoryBase interface {
-  Class() MutableSequenceClass
+type MutableSequenceFactory interface {
+  MutableSequenceFactoryBase
+  MutableSequenceFactoryDerived
 }
 
-type MutableSequenceFactoryContext interface {
+type MutableSequenceFactoryBase interface {
   Sequence
-  MutableSequenceFactoryBase
+  MutableSequenceClassProvider
+}
+
+type MutableSequenceClassProvider interface {
+  Class() MutableSequenceClass
 }
 
 type MutableSequenceFactoryDerived interface {
@@ -31,18 +36,13 @@ type MutableSequenceFactoryDerived interface {
   DropIf(pred func (interface{}) bool) MutableSequence
 }
 
-type MutableSequenceFactory interface {
-  MutableSequenceFactoryContext
-  MutableSequenceFactoryDerived
-}
-
 func EmbeddedMutableSequenceFactory(obj MutableSequenceFactory) MutableSequenceFactory {
   return &sequenceFactory{obj, obj}
 }
 
 type sequenceFactory struct {
   obj MutableSequenceFactory
-  MutableSequenceFactoryContext
+  MutableSequenceFactoryBase
 }
 
 func (this *sequenceFactory) Copy() MutableSequence {

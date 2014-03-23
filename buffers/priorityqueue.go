@@ -18,12 +18,12 @@ import . "github.com/objecthub/containerkit"
 import . "github.com/objecthub/containerkit/impl"
 
 
-var PriorityQueue QueueClass = PriorityQueueClass(UniversalComparison)
+var PriorityQueue *priorityQueueClass = PriorityQueueClass(UniversalComparison)
 
-var ReversePriorityQueue QueueClass =
+var ReversePriorityQueue *priorityQueueClass =
     PriorityQueueClass(InvertComparison(UniversalComparison))
 
-func PriorityQueueClass(comp Comparison) QueueClass {
+func PriorityQueueClass(comp Comparison) *priorityQueueClass {
   return &priorityQueueClass{comp}
 }
 
